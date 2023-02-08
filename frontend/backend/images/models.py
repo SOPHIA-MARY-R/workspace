@@ -22,8 +22,8 @@ class Image(models.Model):
         output_pic=PIL.Image.fromarray(rmbg)
         output_pic.save(buffer, format="png")
         val=buffer.getvalue()
-        filename=os.path.basename(self, pic.name)
+        filename=os.path.basename(self.pic.name)
         name, extension = filename.split(".")
-        self.rmbg_pic(f"bgrm_{name}.png", ContentFile(val), save=False)
+        self.rmbg_pic.save(f"bgrm_{name}.png", ContentFile(val), save=False)
         super().save(*args, **kwargs)
 
