@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 # Create your models here.
 class Image(models.Model):
     pic=models.ImageField(upload_to="images")
-    rmbg_pic=models.ImageField(upload_to="images_rmbg")
+    rmbg_pic=models.ImageField(upload_to="images_rmbg", blank=True)
 
     def __str__(self):
         return str(self.id)
