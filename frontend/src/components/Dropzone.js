@@ -12,23 +12,24 @@ export default function Dropzone(){
         msg: null,
     })
     //dropzone setup
-    const {getRootProps, getInputProps, isDragActive}=useDropzone({
-        onDrop,
-        multiple: false,
-    })
-    const onDrop=(file)=>{
+    const onDrop=(img_file)=>{
         setAlert({
             isVisible: false,
             type: null,
             msg: null,
         })
-        sendImage()
+        sendImage(img_file)
     }
+    const {getRootProps, getInputProps, isDragActive}=useDropzone({
+        onDrop,
+        multiple: false,
+    })
+    
     //send image
     const sendImage=async(image)=>{
         try{
             let formData=new FormData()
-            formData('pic', image[0], image[0].name)
+            formData.append('pic', image[0], image[0].name)
             const response=await fetch(`${url}/images/`,{
                 method: 'POST',
                 body: formData
@@ -45,7 +46,7 @@ export default function Dropzone(){
     // get image
     const getImage=async(id)=>{
         try{
-            const response=fetch(`${url}/images/${id}/download/`, {
+            const response=await fetch(`${url}/images/${id}/download/`, {
                 method: 'GET',
                 responseType: 'blob',
             });
@@ -54,7 +55,7 @@ export default function Dropzone(){
             const downloadLink=document.createElement('a')
             downloadLink.href=href
             downloadLink.setAttribute('download', 'removed_bg_pic.png')
-            downloadLink.body.appendChild(downloadLink)
+            document.body.appendChild(downloadLink)
             downloadLink.click()
             document.body.removeChild(downloadLink)  
             setAlert({isVisible:true, type:'success', msg:'download successfull'})          
