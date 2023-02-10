@@ -1,21 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import Alert from "./Alert";
 
 const url = "http://127.0.0.1:8000/api";
 
-export default function DropZone(){
+export default function Dropzone(){
     //state for displaying alert
-
+    const [alert, setAlert]=useState({
+        isVisible: false,
+        type: null,
+        msg: null,
+    })
     //dropzone setup
-
+    const {getRootProps, getInputProps, isDragActive}=useDropzone({
+        onDrop,
+        multiple: false,
+    })
+    const onDrop=(file)=>{
+        setAlert({
+            isVisible: false,
+            type: null,
+            msg: null,
+        })
+        sendImage()
+    }
     //send image
-
+    const sendImage=async(image)=>{
+        try{
+            let formData=new FormData()
+            formData('pic', image[0], image[0].name)
+            const response=await fetch(`${url}/images/`,{
+                method: 'POST',
+                body: formData
+            })
+            const data=await response.json()
+            const {id}=data
+            getImage(id)
+        }
+        catch(e){
+            console.log(e)
+            setAlert({isVisible:true, type:'error', msg:'oops..something went wrong'})
+        }
+    }
     // get image
+    const getImage=async(id)=>{
+        try{
+            const response=fetch(`${url}/images/${id}/download/`, {
+                method: 'GET',
+                responseType: 'blob',
+            });
+            const  data=await response.blob()
+            const href=window.URL.createObjectURL(data)
+            const downloadLink=document.createElement('a')
+            downloadLink.href=href
+            downloadLink.setAttribute('download', 'removed_bg_pic.png')
+            downloadLink.body.appendChild(downloadLink)
+            downloadLink.click()
+            document.body.removeChild(downloadLink)  
+            setAlert({isVisible:true, type:'success', msg:'download successfull'})          
+        }   
+        catch (e){
+            console.log(e) 
+            setAlert({isVisible:true, type:'error', msg:'oops..something went wrong'})
+        }
+    }
 
+    const {isVisible, type, msg} = alert;
     return (
-        <>
-            <Alert/>
-            dropzone
-        </>
+        <div>
+            <div className="alert">{isVisible && <Alert/>}</div>
+            <div {...getRootProps({ className:"dropZone" })}>
+                <input {...getInputProps}/>
+                <p>
+                    {isDragActive
+                        ? "Drop an image"
+                        : "Drag & Drop image to remove background"
+                    }
+                </p>
+            </div>
+        </div>
     );
 }
