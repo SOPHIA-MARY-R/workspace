@@ -12,20 +12,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.alert{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 300px 200px 10px 200px;
-}
 .dropZone{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 10px 200px 200px 200px;
-  padding: 30px 20px;
+  padding: 250px 240px;
+  width: 500px;
   background-color: aliceblue;
   border-radius: 7px;
+  margin: 100px 100px 10px 200px;
+  cursor:pointer;
   /* border: 1px solid skyblue; */
+}
+.dropZone:hover{
+  border: 4px dashed dodgerblue;
+}
+input{
+  visibility:hidden;
+  width: 0px;
 }

@@ -40,7 +40,7 @@ export default function Dropzone(){
         }
         catch(e){
             console.log(e)
-            setAlert({isVisible:true, type:'error', msg:'oops..something went wrong'})
+            setAlert({isVisible:true, type:'error', msg:'Oops..something went wrong!!'})
         }
     }
     // get image
@@ -58,18 +58,19 @@ export default function Dropzone(){
             document.body.appendChild(downloadLink)
             downloadLink.click()
             document.body.removeChild(downloadLink)  
-            setAlert({isVisible:true, type:'success', msg:'download successfull'})          
+            setAlert({isVisible:true, type:'success', msg:'Download successfull!'})          
         }   
         catch (e){
             console.log(e) 
-            setAlert({isVisible:true, type:'error', msg:'oops..something went wrong'})
+            setAlert({isVisible:true, type:'error', msg:'Oops..something went wrong!!'})
         }
     }
 
     const {isVisible, type, msg} = alert;
     return (
         <div>
-            <div className="alert">{isVisible && <Alert/>}</div>
+            {isVisible && <Alert color={type==='success' ? 'green' : 'red'} msg={msg}/>}
+            <br/>
             <div {...getRootProps({ className:"dropZone" })}>
                 <input {...getInputProps}/>
                 <p>
